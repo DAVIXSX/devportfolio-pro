@@ -1,0 +1,278 @@
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import Header from '../../components/ui/Header';
+import Breadcrumb from '../../components/ui/Breadcrumb';
+import Button from '../../components/ui/Button';
+import Icon from '../../components/AppIcon';
+import ProjectHero from './components/ProjectHero';
+import ProjectOverview from './components/ProjectOverview';
+import ProjectContent from './components/ProjectContent';
+import ProjectGallery from './components/ProjectGallery';
+import TechnicalHighlights from './components/TechnicalHighlights';
+import ProjectActions from './components/ProjectActions';
+import RelatedProjects from './components/RelatedProjects';
+
+// Mock projects data (in a real app, this would come from an API)
+const projectsData = [
+  {
+    id: 'pharmacy-management',
+    title: "Pharmacy Management System",
+    description: "A comprehensive web-based solution designed to streamline pharmacy operations, manage inventory, process prescriptions, and maintain patient records with efficiency and accuracy.",
+    heroImage: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1200&h=600&fit=crop",
+    demoVideo: "#",
+    status: "Live",
+    duration: "6 months",
+    role: "Full Stack Developer",
+    teamSize: "3 developers",
+    platform: "Web Application",
+    technologies: ["Python", "Flask", "Werkzeug", "Jinja2", "SQLAlchemy", "PostgreSQL", "Bootstrap", "jQuery"],
+    liveUrl: "#",
+    githubUrl: "#",
+    challenge: `The primary challenge was creating a robust system that could handle complex pharmacy operations while maintaining data integrity and providing real-time updates.\n\nKey challenges included:\n• Managing concurrent access to medication inventory\n• Ensuring prescription data accuracy and security\n• Creating an intuitive interface for pharmacy staff with varying technical skills\n• Implementing role-based access control for different user types\n• Generating comprehensive reports for business insights`,
+    solution: `We developed a responsive web application with a focus on reliability and ease of use.\n\nOur solution included:\n• Real-time inventory tracking with automatic low-stock alerts\n• Secure prescription processing with validation checks\n• Intuitive user interface designed for efficiency\n• Role-based access control for different staff levels\n• Comprehensive reporting system with export capabilities`,
+    implementation: `The system was built using a modern Python stack with a focus on security and performance.\n\nKey technical decisions:\n• Flask framework for the backend with RESTful API endpoints\n• SQLAlchemy ORM for database interactions\n• PostgreSQL for reliable data storage\n• Jinja2 templating for server-side rendering\n• Bootstrap for responsive UI components\n• Client-side validation with JavaScript\n• Secure authentication system with password hashing\n• Automated backup system for data protection`,
+    keyFeatures: [
+      { title: "Inventory Management", description: "Track medication stock levels with automatic reorder alerts and batch tracking" },
+      { title: "Prescription Processing", description: "Efficiently process and track prescriptions with validation and interaction checks" },
+      { title: "Patient Records", description: "Maintain comprehensive patient profiles with prescription history and allergies" },
+      { title: "Billing System", description: "Generate accurate bills with insurance integration and payment tracking" },
+      { title: "Reporting Dashboard", description: "Generate detailed reports on sales, inventory, and prescription trends" },
+      { title: "User Management", description: "Role-based access control for pharmacists, technicians, and administrators" }
+    ],
+    gallery: [
+      { url: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&h=600&fit=crop", caption: "Main dashboard with key metrics and alerts", type: "Dashboard" },
+      { url: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=600&fit=crop", caption: "Prescription processing interface", type: "Prescription" },
+      { url: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop", caption: "Inventory management system", type: "Inventory" },
+      { url: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=600&fit=crop", caption: "Patient records and history", type: "Patient Records" },
+      { url: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=600&fit=crop", caption: "Sales and reporting dashboard", type: "Analytics" },
+      { url: "https://images.unsplash.com/photo-1582719471384-894e92fbe0f5?w=800&h=600&fit=crop", caption: "User management and permissions", type: "Admin" }
+    ],
+    metrics: [
+      { label: "System Uptime", value: "99.9%", percentage: 99.9, type: "uptime", icon: "Activity" },
+      { label: "Prescription Accuracy", value: "100%", percentage: 100, type: "accuracy", icon: "CheckCircle" },
+      { label: "Inventory Accuracy", value: "99.5%", percentage: 99.5, type: "inventory", icon: "Package" }
+    ],
+    stats: {
+      views: "1.2K",
+      likes: "256",
+      shares: "42",
+      downloads: "89"
+    },
+    relatedProjects: [
+      {
+        id: "hospital-management",
+        title: "Hospital Management System",
+        description: "Comprehensive hospital management solution for patient records and appointments.",
+        image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop",
+        category: "Web Application",
+        url: "#",
+        status: "Live"
+      },
+      {
+        id: "medical-inventory",
+        title: "Medical Inventory Tracker",
+        description: "Specialized inventory management system for medical supplies and equipment.",
+        image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400&h=300&fit=crop",
+        category: "Web Application",
+        url: "#",
+        status: "In Development"
+      }
+    ]
+  }
+  // Add more projects here as needed
+];
+
+const ProjectDetailView = () => {
+  const { projectId } = useParams();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const [projectData, setProjectData] = useState(null);
+
+  useEffect(() => {
+    // Simulate API fetch
+    const fetchProject = () => {
+      const project = projectsData.find(p => p.id === projectId);
+      if (project) {
+        setProjectData(project);
+      }
+      setIsLoading(false);
+    };
+
+    fetchProject();
+  }, [projectId]);
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  if (!projectData) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
+        <h1 className="text-2xl font-bold mb-4">Project Not Found</h1>
+        <p className="mb-6">The project you're looking for doesn't exist or has been moved.</p>
+        <Button
+          onClick={() => navigate('/projects-showcase')}
+          variant="outline"
+          iconName="ArrowLeft"
+        >
+          Back to Projects
+        </Button>
+      </div>
+    );
+  }
+        icon: "CheckCircle"
+      },
+      {
+        label: "Inventory Accuracy",
+        value: "99.5%",
+        percentage: 99.5,
+        type: "inventory",
+        icon: "Package"
+      },
+      {
+        label: "User Retention",
+        value: "85%",
+        percentage: 85,
+        type: "engagement",
+        icon: "Users"
+      },
+      {
+        label: "App Store Rating",
+        value: "4.8/5",
+        percentage: 96,
+        type: "quality",
+        icon: "Star"
+      }
+    ],
+    timeline: [
+      {
+        phase: "Research & Planning",
+        duration: "2 months",
+        description: "User research, market analysis, and technical architecture planning",
+        status: "completed",
+        progress: 100
+      },
+      {
+        phase: "MVP Development",
+        duration: "3 months",
+        description: "Core features development and initial testing",
+        status: "completed",
+        progress: 100
+      },
+      {
+        phase: "Beta Testing",
+        duration: "1 month",
+        description: "User testing, feedback collection, and bug fixes",
+        status: "completed",
+        progress: 100
+      },
+      {
+        phase: "Launch & Marketing",
+        duration: "1 month",
+        description: "App store submission, marketing campaign, and user onboarding",
+        status: "completed",
+        progress: 100
+      },
+      {
+        phase: "Post-Launch Updates",
+        duration: "Ongoing",
+        description: "Feature enhancements, performance optimizations, and user support",
+        status: "current",
+        progress: 65
+      }
+    ],
+    stats: {
+      views: "2.5K",
+      likes: "342",
+      shares: "89",
+      downloads: "156"
+    }
+  };
+
+  // Related projects data
+  const relatedProjects = [
+    {
+      id: 2,
+      title: "Hospital Management System",
+      description: "Comprehensive hospital management solution for patient records and appointments.",
+      image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop",
+      category: "Web Application",
+      url: "#",
+      status: "Live"
+    },
+    {
+      id: 3,
+      title: "Medical Inventory Tracker",
+      description: "Specialized inventory management system for medical supplies and equipment.",
+      image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400&h=300&fit=crop",
+      category: "Web Application",
+      url: "#",
+      status: "In Development"
+    }
+  ];
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <motion.div
+          className="flex flex-col items-center space-y-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-muted-foreground">Loading project details...</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <main className="pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumb />
+          
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            {/* Project Hero Section */}
+            <ProjectHero project={projectData} />
+            
+            {/* Project Overview */}
+            <ProjectOverview project={projectData} />
+            
+            {/* Project Content */}
+            <ProjectContent project={projectData} />
+            
+            {/* Project Gallery */}
+            <ProjectGallery project={projectData} />
+            
+            {/* Technical Highlights */}
+            <TechnicalHighlights project={projectData} />
+            
+            {/* Project Actions */}
+            <ProjectActions project={projectData} />
+            
+            {/* Related Projects */}
+            <RelatedProjects relatedProjects={relatedProjectsData} />
+          </motion.div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default ProjectDetailView;
