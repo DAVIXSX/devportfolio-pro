@@ -1,50 +1,26 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from 'components/ui/Button';
-import Icon from 'components/AppIcon';
+import { ArrowLeft, ArrowRight, Compass } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import SiteFrame from '../components/SiteFrame';
 
 const NotFound = () => {
   const navigate = useNavigate();
 
-  const handleGoHome = () => {
-    navigate('/');
-  };
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-      <div className="text-center max-w-md">
-        <div className="flex justify-center mb-6">
-          <div className="relative">
-            <h1 className="text-9xl font-bold text-primary opacity-20">404</h1>
-          </div>
+    <SiteFrame>
+      <section className="not-found-page page-container">
+        <span className="not-found-page__number">404</span>
+        <span className="not-found-page__icon"><Compass size={26} aria-hidden="true" /></span>
+        <p className="eyebrow">Page not found</p>
+        <h1>Looks like this page took a different route.</h1>
+        <p>The link may be out of date. Let&apos;s get you back to something useful.</p>
+        <div className="not-found-page__actions">
+          <button type="button" className="button button--secondary" onClick={() => navigate(-1)}>
+            <ArrowLeft size={18} aria-hidden="true" /> Go back
+          </button>
+          <Link to="/" className="button button--primary">Back home <ArrowRight size={18} aria-hidden="true" /></Link>
         </div>
-
-        <h2 className="text-2xl font-medium text-onBackground mb-2">Page Not Found</h2>
-        <p className="text-onBackground/70 mb-8">
-          The page you're looking for doesn't exist. Let's get you back!
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button
-            variant="primary"
-            icon={<Icon name="ArrowLeft" />}
-            iconPosition="left"
-            onClick={() => window.history?.back()}
-          >
-            Go Back
-          </Button>
-
-          <Button
-            variant="outline"
-            icon={<Icon name="Home" />}
-            iconPosition="left"
-            onClick={handleGoHome}
-          >
-            Back to Home
-          </Button>
-        </div>
-      </div>
-    </div>
+      </section>
+    </SiteFrame>
   );
 };
 

@@ -3,21 +3,20 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tagger from "@dhiwise/component-tagger";
 
-// https://vitejs.dev/config/
+// Set VITE_BASE_PATH (for example, /devportfolio-pro/) when deploying under a subpath.
+const base = process.env.VITE_BASE_PATH || "/";
+
 export default defineConfig({
-  // Base path for GitHub Pages deployment
-  base: "/devportfolio-pro/",
-  // This changes the out put dir from dist to build
-  // comment this out if that isn't relevant for your project
+  base,
   build: {
     outDir: "build",
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 1000,
   },
   plugins: [tsconfigPaths(), react(), tagger()],
   server: {
-    port: "4028",
+    port: 4028,
     host: "0.0.0.0",
-    strictPort: true,
-    allowedHosts: ['.amazonaws.com']
-  }
+    // Allows Arena's proxied live preview host as well as local development hosts.
+    allowedHosts: true,
+  },
 });
